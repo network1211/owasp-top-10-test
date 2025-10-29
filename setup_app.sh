@@ -48,7 +48,7 @@ Type=simple
 User=$APP_USER
 WorkingDirectory=$APP_DIR
 Environment=PYTHONUNBUFFERED=1
-ExecStart=$VENV_DIR/bin/gunicorn -b 0.0.0.0:5007 owasp-test-app:app
+ExecStart=$VENV_DIR/bin/gunicorn -b 0.0.0.0:5003 owasp-test-app:app
 Restart=always
 RestartSec=3
 
@@ -66,4 +66,4 @@ echo "Status:"
 sudo systemctl status "$APP_NAME" --no-pager || true
 echo
 echo "Quick test (from another shell):"
-echo "  curl -s http://127.0.0.1:5007/swagger | head"
+echo "  curl -s http://127.0.0.1:5003/swagger | head"
