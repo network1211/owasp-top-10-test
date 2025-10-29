@@ -19,45 +19,52 @@
     }
   },
   "security": [
-    { "bearerAuth": [] },
-    { "apiKeyAuth": [] }
+    {
+      "bearerAuth": []
+    },
+    {
+      "apiKeyAuth": []
+    }
   ],
   "paths": {
-    "/api/v1/invoices/{invoice_id}": {
+    "/api/v1/users/{user_id}": {
       "get": {
-        "summary": "Get invoice by ID",
-        "description": "Returns deterministic invoice amount and mapped user_id. Valid invoice_id is 1001..1070.",
-        "security": [
-          { "bearerAuth": [] }
-        ],
+        "summary": "Get user info by ID (BOLA)",
         "parameters": [
           {
-            "name": "invoice_id",
+            "name": "user_id",
             "in": "path",
             "required": true,
-            "schema": { "type": "string" },
-            "description": "Invoice ID (1001..1070)"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
           "200": {
-            "description": "Invoice found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "invoice_id": { "type": "string" },
-                    "user_id": { "type": "string" },
-                    "Amount": { "type": "integer" }
-                  },
-                  "required": ["invoice_id", "user_id", "Amount"]
-                }
-              }
-            }
+            "description": "OK"
           },
-          "401": { "description": "Missing/invalid Bearer token" },
-          "404": { "description": "Invoice not found" }
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "429": {
+            "description": "Too Many Requests"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
         }
       }
     },
@@ -65,18 +72,48 @@
       "get": {
         "summary": "Access using API key and registration token",
         "parameters": [
-          { "name": "apikey", "in": "query", "required": true, "schema": { "type": "string" } },
-          { "name": "regToken", "in": "query", "required": true, "schema": { "type": "string" } }
+          {
+            "name": "apikey",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "regToken",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
         ],
         "responses": {
-          "200": { "description": "OK" },
-          "201": { "description": "Created" },
-          "400": { "description": "Bad Request" },
-          "401": { "description": "Unauthorized" },
-          "403": { "description": "Forbidden" },
-          "404": { "description": "Not Found" },
-          "429": { "description": "Too Many Requests" },
-          "503": { "description": "Service Unavailable" }
+          "200": {
+            "description": "OK"
+          },
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "429": {
+            "description": "Too Many Requests"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
         }
       }
     },
@@ -84,14 +121,30 @@
       "get": {
         "summary": "Access using JWT (bypasses signature validation)",
         "responses": {
-          "200": { "description": "OK" },
-          "201": { "description": "Created" },
-          "400": { "description": "Bad Request" },
-          "401": { "description": "Unauthorized" },
-          "403": { "description": "Forbidden" },
-          "404": { "description": "Not Found" },
-          "429": { "description": "Too Many Requests" },
-          "503": { "description": "Service Unavailable" }
+          "200": {
+            "description": "OK"
+          },
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "429": {
+            "description": "Too Many Requests"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
         }
       }
     },
@@ -99,14 +152,30 @@
       "get": {
         "summary": "Get PII data (BOPLA)",
         "responses": {
-          "200": { "description": "OK" },
-          "201": { "description": "Created" },
-          "400": { "description": "Bad Request" },
-          "401": { "description": "Unauthorized" },
-          "403": { "description": "Forbidden" },
-          "404": { "description": "Not Found" },
-          "429": { "description": "Too Many Requests" },
-          "503": { "description": "Service Unavailable" }
+          "200": {
+            "description": "OK"
+          },
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "429": {
+            "description": "Too Many Requests"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
         }
       }
     },
@@ -120,23 +189,45 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "username": { "type": "string" },
-                  "email": { "type": "string" },
-                  "role": { "type": "string" }
+                  "username": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "role": {
+                    "type": "string"
+                  }
                 }
               }
             }
           }
         },
         "responses": {
-          "200": { "description": "OK" },
-          "201": { "description": "Created" },
-          "400": { "description": "Bad Request" },
-          "401": { "description": "Unauthorized" },
-          "403": { "description": "Forbidden" },
-          "404": { "description": "Not Found" },
-          "429": { "description": "Too Many Requests" },
-          "503": { "description": "Service Unavailable" }
+          "200": {
+            "description": "OK"
+          },
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "429": {
+            "description": "Too Many Requests"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
         }
       }
     },
@@ -150,22 +241,42 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "step": { "type": "integer" },
-                  "user_number": { "type": "string" }
+                  "step": {
+                    "type": "integer"
+                  },
+                  "user_number": {
+                    "type": "string"
+                  }
                 }
               }
             }
           }
         },
         "responses": {
-          "200": { "description": "OK" },
-          "201": { "description": "Created" },
-          "400": { "description": "Bad Request" },
-          "401": { "description": "Unauthorized" },
-          "403": { "description": "Forbidden" },
-          "404": { "description": "Not Found" },
-          "429": { "description": "Too Many Requests" },
-          "503": { "description": "Service Unavailable" }
+          "200": {
+            "description": "OK"
+          },
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "429": {
+            "description": "Too Many Requests"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
         }
       }
     },
@@ -173,27 +284,59 @@
       "get": {
         "summary": "Access data with JWT (BFLA)",
         "responses": {
-          "200": { "description": "OK" },
-          "201": { "description": "Created" },
-          "400": { "description": "Bad Request" },
-          "401": { "description": "Unauthorized" },
-          "403": { "description": "Forbidden" },
-          "404": { "description": "Not Found" },
-          "429": { "description": "Too Many Requests" },
-          "503": { "description": "Service Unavailable" }
+          "200": {
+            "description": "OK"
+          },
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "429": {
+            "description": "Too Many Requests"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
         }
       },
       "post": {
         "summary": "Write data with JWT (BFLA)",
         "responses": {
-          "200": { "description": "OK" },
-          "201": { "description": "Created" },
-          "400": { "description": "Bad Request" },
-          "401": { "description": "Unauthorized" },
-          "403": { "description": "Forbidden" },
-          "404": { "description": "Not Found" },
-          "429": { "description": "Too Many Requests" },
-          "503": { "description": "Service Unavailable" }
+          "200": {
+            "description": "OK"
+          },
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "429": {
+            "description": "Too Many Requests"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
         }
       }
     },
@@ -205,18 +348,36 @@
             "name": "username",
             "in": "path",
             "required": true,
-            "schema": { "type": "string" }
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
-          "200": { "description": "OK" },
-          "201": { "description": "Created" },
-          "400": { "description": "Bad Request" },
-          "401": { "description": "Unauthorized" },
-          "403": { "description": "Forbidden" },
-          "404": { "description": "Not Found" },
-          "429": { "description": "Too Many Requests" },
-          "503": { "description": "Service Unavailable" }
+          "200": {
+            "description": "OK"
+          },
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "429": {
+            "description": "Too Many Requests"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
         }
       }
     },
@@ -230,22 +391,42 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "ticket_type": { "type": "string" },
-                  "quantity": { "type": "integer" }
+                  "ticket_type": {
+                    "type": "string"
+                  },
+                  "quantity": {
+                    "type": "integer"
+                  }
                 }
               }
             }
           }
         },
         "responses": {
-          "200": { "description": "OK" },
-          "201": { "description": "Created" },
-          "400": { "description": "Bad Request" },
-          "401": { "description": "Unauthorized" },
-          "403": { "description": "Forbidden" },
-          "404": { "description": "Not Found" },
-          "429": { "description": "Too Many Requests" },
-          "503": { "description": "Service Unavailable" }
+          "200": {
+            "description": "OK"
+          },
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "429": {
+            "description": "Too Many Requests"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
         }
       }
     },
@@ -253,14 +434,30 @@
       "post": {
         "summary": "Reset ticket counter",
         "responses": {
-          "200": { "description": "OK" },
-          "201": { "description": "Created" },
-          "400": { "description": "Bad Request" },
-          "401": { "description": "Unauthorized" },
-          "403": { "description": "Forbidden" },
-          "404": { "description": "Not Found" },
-          "429": { "description": "Too Many Requests" },
-          "503": { "description": "Service Unavailable" }
+          "200": {
+            "description": "OK"
+          },
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "429": {
+            "description": "Too Many Requests"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
         }
       }
     },
@@ -274,21 +471,39 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "image_url": { "type": "string" }
+                  "image_url": {
+                    "type": "string"
+                  }
                 }
               }
             }
           }
         },
         "responses": {
-          "200": { "description": "OK" },
-          "201": { "description": "Created" },
-          "400": { "description": "Bad Request" },
-          "401": { "description": "Unauthorized" },
-          "403": { "description": "Forbidden" },
-          "404": { "description": "Not Found" },
-          "429": { "description": "Too Many Requests" },
-          "503": { "description": "Service Unavailable" }
+          "200": {
+            "description": "OK"
+          },
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "429": {
+            "description": "Too Many Requests"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
         }
       }
     },
@@ -304,18 +519,34 @@
                 "description": "CORS policy",
                 "schema": {
                   "type": "string",
-                  "enum": ["https://www.test.com"]
+                  "enum": [
+                    "https://www.test.com"
+                  ]
                 }
               }
             }
           },
-          "201": { "description": "Created" },
-          "400": { "description": "Bad Request" },
-          "401": { "description": "Unauthorized" },
-          "403": { "description": "Forbidden" },
-          "404": { "description": "Not Found" },
-          "429": { "description": "Too Many Requests" },
-          "503": { "description": "Service Unavailable" }
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "429": {
+            "description": "Too Many Requests"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
         }
       }
     },
@@ -327,18 +558,36 @@
             "name": "X-UCA",
             "in": "header",
             "required": false,
-            "schema": { "type": "string" }
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
-          "200": { "description": "OK" },
-          "201": { "description": "Created" },
-          "400": { "description": "Bad Request" },
-          "401": { "description": "Unauthorized" },
-          "403": { "description": "Forbidden" },
-          "404": { "description": "Not Found" },
-          "429": { "description": "Too Many Requests" },
-          "503": { "description": "Service Unavailable" }
+          "200": {
+            "description": "OK"
+          },
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "429": {
+            "description": "Too Many Requests"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
         }
       }
     }
