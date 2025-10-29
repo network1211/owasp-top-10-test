@@ -1,0 +1,346 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "OWASP API Vulnerabilities Combined App (Security Scheme Added)",
+    "version": "1.0.5"
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      },
+      "apiKeyAuth": {
+        "type": "apiKey",
+        "in": "query",
+        "name": "apikey"
+      }
+    }
+  },
+  "security": [
+    { "bearerAuth": [] },
+    { "apiKeyAuth": [] }
+  ],
+  "paths": {
+    "/api/v1/invoices/{invoice_id}": {
+      "get": {
+        "summary": "Get invoice by ID",
+        "description": "Returns deterministic invoice amount and mapped user_id. Valid invoice_id is 1001..1070.",
+        "security": [
+          { "bearerAuth": [] }
+        ],
+        "parameters": [
+          {
+            "name": "invoice_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "Invoice ID (1001..1070)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Invoice found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "invoice_id": { "type": "string" },
+                    "user_id": { "type": "string" },
+                    "Amount": { "type": "integer" }
+                  },
+                  "required": ["invoice_id", "user_id", "Amount"]
+                }
+              }
+            }
+          },
+          "401": { "description": "Missing/invalid Bearer token" },
+          "404": { "description": "Invoice not found" }
+        }
+      }
+    },
+    "/api/v1/auth/data": {
+      "get": {
+        "summary": "Access using API key and registration token",
+        "parameters": [
+          { "name": "apikey", "in": "query", "required": true, "schema": { "type": "string" } },
+          { "name": "regToken", "in": "query", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "201": { "description": "Created" },
+          "400": { "description": "Bad Request" },
+          "401": { "description": "Unauthorized" },
+          "403": { "description": "Forbidden" },
+          "404": { "description": "Not Found" },
+          "429": { "description": "Too Many Requests" },
+          "503": { "description": "Service Unavailable" }
+        }
+      }
+    },
+    "/api/v1/jwt/data": {
+      "get": {
+        "summary": "Access using JWT (bypasses signature validation)",
+        "responses": {
+          "200": { "description": "OK" },
+          "201": { "description": "Created" },
+          "400": { "description": "Bad Request" },
+          "401": { "description": "Unauthorized" },
+          "403": { "description": "Forbidden" },
+          "404": { "description": "Not Found" },
+          "429": { "description": "Too Many Requests" },
+          "503": { "description": "Service Unavailable" }
+        }
+      }
+    },
+    "/api/v1/pii": {
+      "get": {
+        "summary": "Get PII data (BOPLA)",
+        "responses": {
+          "200": { "description": "OK" },
+          "201": { "description": "Created" },
+          "400": { "description": "Bad Request" },
+          "401": { "description": "Unauthorized" },
+          "403": { "description": "Forbidden" },
+          "404": { "description": "Not Found" },
+          "429": { "description": "Too Many Requests" },
+          "503": { "description": "Service Unavailable" }
+        }
+      }
+    },
+    "/api/v1/users": {
+      "post": {
+        "summary": "Create user (mass assignment vulnerability)",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": { "type": "string" },
+                  "email": { "type": "string" },
+                  "role": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "OK" },
+          "201": { "description": "Created" },
+          "400": { "description": "Bad Request" },
+          "401": { "description": "Unauthorized" },
+          "403": { "description": "Forbidden" },
+          "404": { "description": "Not Found" },
+          "429": { "description": "Too Many Requests" },
+          "503": { "description": "Service Unavailable" }
+        }
+      }
+    },
+    "/initiate_forgot_password": {
+      "post": {
+        "summary": "Initiate forgot password (Unrestricted Resource Consumption)",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "step": { "type": "integer" },
+                  "user_number": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "OK" },
+          "201": { "description": "Created" },
+          "400": { "description": "Bad Request" },
+          "401": { "description": "Unauthorized" },
+          "403": { "description": "Forbidden" },
+          "404": { "description": "Not Found" },
+          "429": { "description": "Too Many Requests" },
+          "503": { "description": "Service Unavailable" }
+        }
+      }
+    },
+    "/api/v1/data": {
+      "get": {
+        "summary": "Access data with JWT (BFLA)",
+        "responses": {
+          "200": { "description": "OK" },
+          "201": { "description": "Created" },
+          "400": { "description": "Bad Request" },
+          "401": { "description": "Unauthorized" },
+          "403": { "description": "Forbidden" },
+          "404": { "description": "Not Found" },
+          "429": { "description": "Too Many Requests" },
+          "503": { "description": "Service Unavailable" }
+        }
+      },
+      "post": {
+        "summary": "Write data with JWT (BFLA)",
+        "responses": {
+          "200": { "description": "OK" },
+          "201": { "description": "Created" },
+          "400": { "description": "Bad Request" },
+          "401": { "description": "Unauthorized" },
+          "403": { "description": "Forbidden" },
+          "404": { "description": "Not Found" },
+          "429": { "description": "Too Many Requests" },
+          "503": { "description": "Service Unavailable" }
+        }
+      }
+    },
+    "/generate_token/{username}": {
+      "get": {
+        "summary": "Generate JWT token for a user",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "201": { "description": "Created" },
+          "400": { "description": "Bad Request" },
+          "401": { "description": "Unauthorized" },
+          "403": { "description": "Forbidden" },
+          "404": { "description": "Not Found" },
+          "429": { "description": "Too Many Requests" },
+          "503": { "description": "Service Unavailable" }
+        }
+      }
+    },
+    "/api/v1/tickets/buy": {
+      "post": {
+        "summary": "Buy tickets (business flow abuse)",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "ticket_type": { "type": "string" },
+                  "quantity": { "type": "integer" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "OK" },
+          "201": { "description": "Created" },
+          "400": { "description": "Bad Request" },
+          "401": { "description": "Unauthorized" },
+          "403": { "description": "Forbidden" },
+          "404": { "description": "Not Found" },
+          "429": { "description": "Too Many Requests" },
+          "503": { "description": "Service Unavailable" }
+        }
+      }
+    },
+    "/api/v1/tickets/reset": {
+      "post": {
+        "summary": "Reset ticket counter",
+        "responses": {
+          "200": { "description": "OK" },
+          "201": { "description": "Created" },
+          "400": { "description": "Bad Request" },
+          "401": { "description": "Unauthorized" },
+          "403": { "description": "Forbidden" },
+          "404": { "description": "Not Found" },
+          "429": { "description": "Too Many Requests" },
+          "503": { "description": "Service Unavailable" }
+        }
+      }
+    },
+    "/api/v1/profile/picture": {
+      "post": {
+        "summary": "Update profile picture (SSRF test)",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "image_url": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "OK" },
+          "201": { "description": "Created" },
+          "400": { "description": "Bad Request" },
+          "401": { "description": "Unauthorized" },
+          "403": { "description": "Forbidden" },
+          "404": { "description": "Not Found" },
+          "429": { "description": "Too Many Requests" },
+          "503": { "description": "Service Unavailable" }
+        }
+      }
+    },
+    "/api/v1/config/sample": {
+      "get": {
+        "summary": "Get config (Security Misconfiguration: CORS *)",
+        "description": "Simulates a weak CORS policy returning Access-Control-Allow-Origin.",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "description": "CORS policy",
+                "schema": {
+                  "type": "string",
+                  "enum": ["https://www.test.com"]
+                }
+              }
+            }
+          },
+          "201": { "description": "Created" },
+          "400": { "description": "Bad Request" },
+          "401": { "description": "Unauthorized" },
+          "403": { "description": "Forbidden" },
+          "404": { "description": "Not Found" },
+          "429": { "description": "Too Many Requests" },
+          "503": { "description": "Service Unavailable" }
+        }
+      }
+    },
+    "/api/v1/userinfo": {
+      "get": {
+        "summary": "Get user info (Unsafe Consumption)",
+        "parameters": [
+          {
+            "name": "X-UCA",
+            "in": "header",
+            "required": false,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "201": { "description": "Created" },
+          "400": { "description": "Bad Request" },
+          "401": { "description": "Unauthorized" },
+          "403": { "description": "Forbidden" },
+          "404": { "description": "Not Found" },
+          "429": { "description": "Too Many Requests" },
+          "503": { "description": "Service Unavailable" }
+        }
+      }
+    }
+  }
+}
