@@ -10,22 +10,6 @@ import uuid
 
 app = Flask(__name__)
 
-# ========== Global Auth Check =====
-def require_bearer_or_401():
-    if g.basic_auth_valid:
-        return None  # allow basic bypass if you still want it
-    auth_header = request.headers.get('Authorization', '')
-    if not auth_header.startswith('Bearer '):
-        return jsonify({"error": "Missing Authorization header"}), 401
-    token = auth_header.split()[1]
-    try:
-        jwt.decode(token, PUBLIC_KEY, algorithms=['RS256'])
-        return None
-    except InvalidTokenError:
-        return jsonify({"error": "Invalid or expired token"}), 401
-    except Exception:
-        return jsonify({"error": "Malformed or missing token"}), 401
-
 # ========== Static Setup ==========
 SWAGGER_URL = '/swagger'
 API_URL = '/static/swagger.json'
@@ -43,14 +27,60 @@ with open('private.pem', 'r') as f:
 with open('public.pem', 'r') as f:
     PUBLIC_KEY = f.read()
 
-# Sequential users: 11..70
 USERS = {
-    str(i): {
-        "username": str(i),
-        "email": f"user{i}@example.com",
-        "group": "user"
-    }
-    for i in range(11, 81)
+    "user1": {"username": "user1", "group": "user"},
+    "admin1": {"username": "admin1", "group": "admin"},
+    "1762": {"username": "attacker", "email": "attacker@example.com", "group": "user"},
+    "1083": {"username": "1083", "email": "user1083@example.com", "group": "user"},
+    "1376": {"username": "1376", "email": "user1376@example.com", "group": "user"},
+    "1399": {"username": "1399", "email": "user1399@example.com", "group": "user"},
+    "1174": {"username": "1174", "email": "user1174@example.com", "group": "user"},
+    "1122": {"username": "1122", "email": "user1122@example.com", "group": "user"},
+    "1297": {"username": "1297", "email": "user1297@example.com", "group": "user"},
+    "1417": {"username": "1417", "email": "user1417@example.com", "group": "user"},
+    "1730": {"username": "1730", "email": "user1730@example.com", "group": "user"},
+    "1098": {"username": "1098", "email": "user1098@example.com", "group": "user"},
+    "1742": {"username": "1742", "email": "user1742@example.com", "group": "user"},
+    "1784": {"username": "1784", "email": "user1784@example.com", "group": "user"},
+    "1009": {"username": "1009", "email": "user1009@example.com", "group": "user"},
+    "1833": {"username": "1833", "email": "user1833@example.com", "group": "user"},
+    "1448": {"username": "1448", "email": "user1448@example.com", "group": "user"},
+    "1171": {"username": "1171", "email": "user1171@example.com", "group": "user"},
+    "1276": {"username": "1276", "email": "user1276@example.com", "group": "user"},
+    "1657": {"username": "1657", "email": "user1657@example.com", "group": "user"},
+    "1754": {"username": "1754", "email": "user1754@example.com", "group": "user"},
+    "1877": {"username": "1877", "email": "user1877@example.com", "group": "user"},
+    "1381": {"username": "1381", "email": "user1381@example.com", "group": "user"},
+    "1459": {"username": "1459", "email": "user1459@example.com", "group": "user"},
+    "1923": {"username": "1923", "email": "user1923@example.com", "group": "user"},
+    "1134": {"username": "1134", "email": "user1134@example.com", "group": "user"},
+    "1543": {"username": "1543", "email": "user1543@example.com", "group": "user"},
+    "1331": {"username": "1331", "email": "user1331@example.com", "group": "user"},
+    "1885": {"username": "1885", "email": "user1885@example.com", "group": "user"},
+    "1018": {"username": "1018", "email": "user1018@example.com", "group": "user"},
+    "1034": {"username": "1034", "email": "user1034@example.com", "group": "user"},
+    "1192": {"username": "1192", "email": "user1192@example.com", "group": "user"},
+    "1961": {"username": "1961", "email": "user1961@example.com", "group": "user"},
+    "1703": {"username": "1703", "email": "user1703@example.com", "group": "user"},
+    "1227": {"username": "1227", "email": "user1227@example.com", "group": "user"},
+    "1312": {"username": "1312", "email": "user1312@example.com", "group": "user"},
+    "1346": {"username": "1346", "email": "user1346@example.com", "group": "user"},
+    "1955": {"username": "1955", "email": "user1955@example.com", "group": "user"},
+    "1596": {"username": "1596", "email": "user1596@example.com", "group": "user"},
+    "1869": {"username": "1869", "email": "user1869@example.com", "group": "user"},
+    "1235": {"username": "1235", "email": "user1235@example.com", "group": "user"},
+    "1810": {"username": "1810", "email": "user1810@example.com", "group": "user"},
+    "1471": {"username": "1471", "email": "user1471@example.com", "group": "user"},
+    "1365": {"username": "1365", "email": "user1365@example.com", "group": "user"},
+    "1243": {"username": "1243", "email": "user1243@example.com", "group": "user"},
+    "1934": {"username": "1934", "email": "user1934@example.com", "group": "user"},
+    "1765": {"username": "1765", "email": "user1765@example.com", "group": "user"},
+    "1679": {"username": "1679", "email": "user1679@example.com", "group": "user"},
+    "1858": {"username": "1858", "email": "user1858@example.com", "group": "user"},
+    "1519": {"username": "1519", "email": "user1519@example.com", "group": "user"},
+    "1602": {"username": "1602", "email": "user1602@example.com", "group": "user"},
+    "1047": {"username": "1047", "email": "user1047@example.com", "group": "user"},
+    "1555": {"username": "1555", "email": "user1555@example.com", "group": "user"}
 }
 
 # ========== Basic Auth Bypass Check ==========
@@ -77,42 +107,39 @@ def jwks():
     })
 
 # ========== 1. BOLA ==========
-@app.route('/api/v1/invoices/<invoice_id>', methods=['GET'])
-def get_invoice(invoice_id):
-    # Restrict invoice_id to 1001..1070
-    try:
-        inv = int(invoice_id)
-    except ValueError:
-        return jsonify({"error": "Invoice not found"}), 404
-    if inv < 1001 or inv > 1070:
-        return jsonify({"error": "Invoice not found"}), 404
+@app.route('/api/v1/users/<user_id>', methods=['GET'])
+def get_user(user_id):
+    # Return 404 if the user doesn't exist in the USERS "DB"
+    if user_id not in USERS:
+        return jsonify({"error": "User not found"}), 404
 
-    # JWT required (validate signature/claims)
+    # If Basic Auth bypass is valid (no JWT required)
+    if g.basic_auth_valid:
+        return jsonify({
+            "message": "Access granted via Basic Auth",
+            "username": user_id,
+            "email": f"user{user_id}@example.com"
+        })
+
+    # Otherwise require Bearer token (validated, but not used for values)
     auth_header = request.headers.get('Authorization', '')
     if not auth_header.startswith('Bearer '):
         return jsonify({"error": "Missing Authorization header"}), 401
 
-    token = auth_header.split()[1]
+    token = auth_header.replace('Bearer ', '')
     try:
-        # Validate JWT (we don't use its username for the response anymore)
+        # Validate signature & claims; ignore contents for response shaping
         jwt.decode(token, PUBLIC_KEY, algorithms=['RS256'])
     except InvalidTokenError:
         return jsonify({"error": "Invalid or expired token"}), 401
     except Exception:
         return jsonify({"error": "Malformed or missing token"}), 401
 
-    # Static mapping: invoice_id -> user_id (1001->11, ..., 1070->80)
-    mapped_user_id = str(inv - 990)
-    if mapped_user_id not in USERS:
-        return jsonify({"error": "User not found for invoice"}), 404
-
-    # Deterministic 3-digit amount (static per invoice_id)
-    amount = ((inv * 37) % 900) + 100   # always 100..999, same result for same invoice
-
+    # Respond using the path parameter only
     return jsonify({
-        "invoice_id": str(inv),
-        "user_id": mapped_user_id,
-        "Amount": amount
+        "message": "Access granted via Bearer token",
+        "username": user_id,
+        "email": f"user{user_id}@example.com"
     })
 
 # ========== 2. Broken Authentication ==========
@@ -158,9 +185,6 @@ def mass_assignment():
 # ========== 4. Unrestricted Resource Consumption ==========
 @app.route('/initiate_forgot_password', methods=['POST'])
 def resource_consumption():
-    gate = require_bearer_or_401()
-    if gate:
-        return gate
     if g.basic_auth_valid:
         user_number = request.get_json().get("user_number")
         return jsonify({
@@ -202,21 +226,23 @@ def secured_data():
 
 @app.route('/generate_token/<username>', methods=['GET'])
 def generate_token(username):
-    user = USERS.get(username)  # now only 11..70 exist
+    user = USERS.get(username)
     if not user:
         return jsonify({"error": "Invalid user"}), 404
 
     now = datetime.datetime.utcnow()
     expiration = now + datetime.timedelta(days=30)
+
     payload = {
         "sub": user["username"],
         "jti": str(uuid.uuid4()),
         "iat": now,
         "exp": expiration,
         "nbf": now,
-        "username": user["username"],
+        "username": user.get("username"),
         "group": user.get("group", "user")
     }
+
     token = jwt.encode(payload, PRIVATE_KEY, algorithm='RS256')
     return jsonify({"token": token})
 
@@ -225,9 +251,6 @@ tickets_remaining = 100
 
 @app.route('/api/v1/tickets/buy', methods=['POST'])
 def ticket_buy():
-    gate = require_bearer_or_401()
-    if gate:
-        return gate
     global tickets_remaining
     if g.basic_auth_valid:
         req = request.get_json()
@@ -246,9 +269,6 @@ def ticket_buy():
 
 @app.route('/api/v1/tickets/reset', methods=['POST'])
 def reset_tickets():
-    gate = require_bearer_or_401()
-    if gate:
-        return gate
     global tickets_remaining
     tickets_remaining = 100
     return jsonify({"message": "Tickets have been reset", "total": tickets_remaining}), 200
@@ -256,9 +276,6 @@ def reset_tickets():
 # ========== 7. SSRF ==========
 @app.route('/api/v1/profile/picture', methods=['POST'])
 def profile_picture():
-    gate = require_bearer_or_401()
-    if gate:
-        return gate
     if g.basic_auth_valid:
         url = request.get_json().get('image_url')
         return jsonify({"message": "Image set", "url": url})
@@ -271,9 +288,6 @@ def profile_picture():
 # ========== 8. Misconfig (CORS *) ==========
 @app.route('/api/v1/config/sample', methods=['GET'])
 def config_sample():
-    gate = require_bearer_or_401()
-    if gate:
-        return gate
     if g.basic_auth_valid:
         resp = jsonify({"message": "Weak CORS"})
         resp.headers['Access-Control-Allow-Origin'] = '*'
@@ -294,9 +308,6 @@ def shadow_api():
 # ========== 10. Unsafe Consumption ==========
 @app.route('/api/v1/userinfo', methods=['GET'])
 def unsafe_consume():
-    gate = require_bearer_or_401()
-    if gate:
-        return gate
     if g.basic_auth_valid:
         return jsonify({"name": "John", "email": "john@example.com", "phone": "+1-555-123-4567"})
 
@@ -310,4 +321,4 @@ def download_swagger():
     return send_from_directory('static', 'swagger.json', as_attachment=True)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5007, debug=True)
+    app.run(host='0.0.0.0', port=5003, debug=True)
